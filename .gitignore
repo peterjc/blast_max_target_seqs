@@ -1,0 +1,9 @@
+#Ignore backup files from some Unix editors,
+\#*.py\#
+*~
+*.swp
+*.bak
+
+#Ignore compressed files and associated md5 files from downloads
+*.gz
+*.gz.md5
