@@ -53,3 +53,13 @@ $ grep -c "^>" older_matches.fasta
 496
 $ wc -l older_matches.txt 
 496 older_matches.txt
+
+
+(2) Creating older_matches.taxmap.txt
+
+Derive full taxid map from the blast output using the 2018 NR database
+
+$ cat out.1e-5.max100.taxids.txt out.1e-5.max500.taxids.txt | grep -v "Hypsibius dujardini" | grep -v "Ramazzottius varieornatus" | cut -f 2,15 | cut -f 1 -d ";" | sort | uniq > older_matches.taxmap.txt
+
+Note the messing about with the semi-colon as makeblastdb does not tolerate
+multiple taxid values for an entry.
