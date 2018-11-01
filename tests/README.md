@@ -107,3 +107,82 @@ match comes and goes with changes to ``-max_target_seqs``:
     nHd.2.3.1.t00019-RA KHJ41189.1      61.983  121     46      0       1       121     39      159     1.49e-41        141     Eukaryota
     nHd.2.3.1.t00019-RA KRX89026.1      63.115  122     45      0       1       122     153     274     1.82e-41        140     Eukaryota
     nHd.2.3.1.t00019-RA CDW52156.1      61.983  121     46      0       1       121     97      217     1.90e-41        141     Eukaryota
+
+
+# Make and test a database in reverse order
+
+Prepare a new database with sequences in reverse order, FASTA file reversed
+using this Biopython one-liner:
+
+    $ python3 -c "from Bio import SeqIO; print(SeqIO.write(list(SeqIO.parse('older_matches.fasta', 'fasta'))[::-1], 'reverse_order.fasta', 'fasta'))"
+    496
+
+Build the reverse_order.fasta protein BLAST DB:
+
+    $ makeblastdb -dbtype prot -in reverse_order.fasta -parse_seqids -taxid_map older_matches.taxmap.txt
+    Building a new DB, current time: 11/01/2018 13:42:24
+    New DB name:   /mnt/shared/users/pc40583/repositories/blast_max_target_seqs/tests/reverse_order.fasta
+    New DB title:  reverse_order.fasta
+    Sequence type: Protein
+    Keep MBits: T
+    Maximum file size: 1000000000B
+    Adding sequences from FASTA; added 496 sequences in 0.036006 seconds.
+
+As one would hope, this appears to make no difference to the search:
+
+    $ blastp -query input.fasta -db reverse_order.fasta -outfmt "6 std sskingdoms" -max_target_seqs 100 -evalue 1e-5 | head
+    nHd.2.3.1.t00019-RA KRX89027.1      63.115  122     45      0       1       122     105     226     5.26e-42        140     Eukaryota
+    nHd.2.3.1.t00019-RA KRX89025.1      63.115  122     45      0       1       122     105     226     1.07e-41        140     Eukaryota
+    nHd.2.3.1.t00019-RA KFD69381.1      61.983  121     46      0       1       121     466     586     1.39e-41        141     Eukaryota
+    nHd.2.3.1.t00019-RA KRZ17714.1      63.115  122     45      0       1       122     121     242     1.39e-41        140     Eukaryota
+    nHd.2.3.1.t00019-RA KFD48812.1      61.983  121     46      0       1       121     419     539     1.44e-41        141     Eukaryota
+    nHd.2.3.1.t00019-RA KHJ41189.1      61.983  121     46      0       1       121     39      159     1.49e-41        141     Eukaryota
+    nHd.2.3.1.t00019-RA KRX89026.1      63.115  122     45      0       1       122     153     274     1.82e-41        140     Eukaryota
+    nHd.2.3.1.t00019-RA CDW52156.1      61.983  121     46      0       1       121     97      217     1.90e-41        141     Eukaryota
+    nHd.2.3.1.t00019-RA KRZ35475.1      63.115  122     45      0       1       122     105     226     2.77e-41        140     Eukaryota
+    nHd.2.3.1.t00019-RA KRX89032.1      63.115  122     45      0       1       122     105     226     2.95e-41        140     Eukaryota
+
+    $ blastp -query input.fasta -db reverse_order.fasta -outfmt "6 std sskingdoms" -evalue 1e-5 | head
+    nHd.2.3.1.t00019-RA WP_042303394.1  58.678  121     49      1       4       124     93      212     7.54e-46        153     Bacteria
+    nHd.2.3.1.t00019-RA WP_017775351.1  58.678  121     49      1       4       124     93      212     8.49e-46        153     Bacteria
+    nHd.2.3.1.t00019-RA KRX89027.1      63.115  122     45      0       1       122     105     226     5.26e-42        140     Eukaryota
+    nHd.2.3.1.t00019-RA KRX89025.1      63.115  122     45      0       1       122     105     226     1.07e-41        140     Eukaryota
+    nHd.2.3.1.t00019-RA KFD69381.1      61.983  121     46      0       1       121     466     586     1.39e-41        141     Eukaryota
+    nHd.2.3.1.t00019-RA KRZ17714.1      63.115  122     45      0       1       122     121     242     1.39e-41        140     Eukaryota
+    nHd.2.3.1.t00019-RA KFD48812.1      61.983  121     46      0       1       121     419     539     1.44e-41        141     Eukaryota
+    nHd.2.3.1.t00019-RA KHJ41189.1      61.983  121     46      0       1       121     39      159     1.49e-41        141     Eukaryota
+    nHd.2.3.1.t00019-RA KRX89026.1      63.115  122     45      0       1       122     153     274     1.82e-41        140     Eukaryota
+    nHd.2.3.1.t00019-RA CDW52156.1      61.983  121     46      0       1       121     97      217     1.90e-41        141     Eukaryota
+
+Checking this explicitly with diff:
+
+    $ blastp -query input.fasta -db older_matches.fasta -outfmt "6 std sskingdoms" -max_target_seqs 100 -evalue 1e-5 -out input_vs_older_matches_max_100.tsv
+    $ blastp -query input.fasta -db reverse_order.fasta -outfmt "6 std sskingdoms" -max_target_seqs 100 -evalue 1e-5 -out input_vs_reverse_order_max_100.tsv
+    $ diff input_vs_older_matches_max_100.tsv input_vs_reverse_order_max_100.tsv
+    70d69
+    < nHd.2.3.1.t00019-RA	XP_015813695.1	60.000	125	49	1	1	125	100	223	1.13e-38	133	Eukaryota
+    71a71
+    > nHd.2.3.1.t00019-RA	XP_015813695.1	60.000	125	49	1	1	125	100	223	1.13e-38	133	Eukaryota
+
+That turns out to be a trivial difference in the order of tied hits:
+
+    $ grep -n -C 2 "XP_015813695.1" input_vs_older_matches_max_100.tsv
+    68-nHd.2.3.1.t00019-RA	XP_001988914.1	59.677	124	49	1	1	124	100	222	1.03e-38	133	Eukaryota
+    69-nHd.2.3.1.t00019-RA	KTG43357.1	60.800	125	48	1	1	125	100	223	1.08e-38	133	Eukaryota
+    70:nHd.2.3.1.t00019-RA	XP_015813695.1	60.000	125	49	1	1	125	100	223	1.13e-38	133	Eukaryota
+    71-nHd.2.3.1.t00019-RA	XP_007556854.1	59.200	125	50	1	1	125	100	223	1.13e-38	133	Eukaryota
+    72-nHd.2.3.1.t00019-RA	PWA22675.1	59.200	125	50	1	1	125	100	223	1.20e-38	133	Eukaryota
+    $ grep -n -C 2 "XP_015813695.1" input_vs_reverse_order_max_100.tsv
+    69-nHd.2.3.1.t00019-RA	KTG43357.1	60.800	125	48	1	1	125	100	223	1.08e-38	133	Eukaryota
+    70-nHd.2.3.1.t00019-RA	XP_007556854.1	59.200	125	50	1	1	125	100	223	1.13e-38	133	Eukaryota
+    71:nHd.2.3.1.t00019-RA	XP_015813695.1	60.000	125	49	1	1	125	100	223	1.13e-38	133	Eukaryota
+    72-nHd.2.3.1.t00019-RA	PWA22675.1	59.200	125	50	1	1	125	100	223	1.20e-38	133	Eukaryota
+    73-nHd.2.3.1.t00019-RA	XP_014848806.1	59.200	125	50	1	1	125	100	223	1.26e-38	133	Eukaryota
+
+The same appears to be true without the 100 alignments limit, but with even more reorderings due to ties.
+
+    $ blastp -query input.fasta -db older_matches.fasta -outfmt "6 std sskingdoms" -evalue 1e-5 -out input_vs_older_matches.tsv
+    $ blastp -query input.fasta -db reverse_order.fasta -outfmt "6 std sskingdoms" -evalue 1e-5 -out input_vs_reverse_order.tsv
+    $ diff <(sort input_vs_older_matches.tsv) <(sort input_vs_reverse_order.tsv)
+
+i.e. No differences after applying Unix sort to the output files, so no changes to the scoring etc.
