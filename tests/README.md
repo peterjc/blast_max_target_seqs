@@ -107,3 +107,17 @@ match comes and goes with changes to ``-max_target_seqs``:
     nHd.2.3.1.t00019-RA KHJ41189.1      61.983  121     46      0       1       121     39      159     1.49e-41        141     Eukaryota
     nHd.2.3.1.t00019-RA KRX89026.1      63.115  122     45      0       1       122     153     274     1.82e-41        140     Eukaryota
     nHd.2.3.1.t00019-RA CDW52156.1      61.983  121     46      0       1       121     97      217     1.90e-41        141     Eukaryota
+
+Indeed, if you use -max_target_seqs 1 you do not get the best hit seen
+without applying the limit:
+
+    $ blastp -query input.fasta -db older_matches.fasta -outfmt "6 std sskingdoms" -max_target_seqs 1
+    nHd.2.3.1.t00019-RA KRX89027.1      63.115  122     45      0       1       122     105     226     5.26e-42        140     Eukaryota
+
+In this particular example, at least with this version of BLAST+, the first
+hit returned changes at a limit of 219 or 220 sequences:
+
+    $ blastp -query input.fasta -db older_matches.fasta -outfmt "6 std sskingdoms" -max_target_seqs 219 | head -n 1
+    nHd.2.3.1.t00019-RA        KRX89027.1      63.115  122     45      0       1       122     105     226     5.26e-42        140     Eukaryota
+    $ blastp -query input.fasta -db older_matches.fasta -outfmt "6 std sskingdoms" -max_target_seqs 220 | head -n 1
+    nHd.2.3.1.t00019-RA        WP_042303394.1  58.678  121     49      1       4       124     93      212     7.54e-46        153     Bacteria
