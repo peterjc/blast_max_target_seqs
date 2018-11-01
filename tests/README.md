@@ -8,7 +8,8 @@ in December 2015.
 
 # Creating FASTA file older_matches.fasta
 
-Using NR data 2018-06-08 (8 June 2018)
+I ran BLASTP using Sujai's original query sequence, and the NCBI NR database
+from 2018-06-08 (8 June 2018):
 
     $ export BLASTDB=/mnt/shared/cluster/blast/ncbi/extracted/
     $ blastp -query input.fasta -db nr -outfmt "6 std sskingdoms sscinames staxids" -max_target_seqs 500 -evalue 1e-5 > out.1e-5.max500.taxids.txt
@@ -38,7 +39,12 @@ Using NR data 2018-06-08 (8 June 2018)
     nHd.2.3.1.t00019-RA	KFD48812.1	61.983	121	46	0	1	121	419	539	1.92e-36	141	Eukaryota	Trichuris suis	68888
     nHd.2.3.1.t00019-RA	KHJ41189.1	61.983	121	46	0	1	121	39	159	1.98e-36	141	Eukaryota	Trichuris suis	68888
 
+Make a list of all the current matches versioned accession numbers (column 2) after excluding the two recently added tardigrade results which were not in the NR database in 2015:
+
     $ cat out.1e-5.max100.taxids.txt out.1e-5.max500.taxids.txt | grep -v "Hypsibius dujardini" | grep -v "Ramazzottius varieornatus" | cut -f 2 | sort | uniq > older_matches.txt
+
+Now use the ``blastdbcmd`` to make a FASTA file of these sequences, which will become our test database:
+
     $ blastdbcmd -entry_batch older_matches.txt -db nr -dbtype prot > older_matches.fasta
     $ grep -c "^>" older_matches.fasta 
     496
@@ -48,18 +54,19 @@ Using NR data 2018-06-08 (8 June 2018)
 
 # Creating taxid map older_matches.taxmap.txt
 
-Derive full taxid map from the blast output using the 2018 NR database:
+Derive full taxid map as file ``older_matches.taxmap.txt`` from the blast
+output using the 2018 NR database:
 
     $ cat out.1e-5.max100.taxids.txt out.1e-5.max500.taxids.txt | grep -v "Hypsibius dujardini" | grep -v "Ramazzottius varieornatus" | cut -f 2,15 | cut -f 1 -d ";" | sort | uniq > older_matches.taxmap.txt
 
 Note the messing about with the semi-colon as makeblastdb does not tolerate
-multiple taxid values for an entry.
+multiple taxid values for an entry. This could have been achieved by rerunning
+``blastp`` and requesting only the relevant columns.
 
 
 # Build the test database
 
-
-Build older_matches.fasta BLAST database
+Build ``older_matches.fasta`` BLAST database:
     
     $ makeblastdb -dbtype prot -in older_matches.fasta -parse_seqids -taxid_map older_matches.taxmap.txt
     Building a new DB, current time: 10/10/2018 11:56:09
@@ -74,7 +81,8 @@ Build older_matches.fasta BLAST database
 
 # Reproduce the issue
 
-This works for reproducing the original problem, in that the top bacterial match comes and goes with changes to -max_target_seqs
+This works for reproducing the original problem, in that the top bacterial
+match comes and goes with changes to ``-max_target_seqs``:
     
     $ blastp -query input.fasta -db older_matches.fasta -outfmt "6 std sskingdoms" -max_target_seqs 100 -evalue 1e-5 | head
     nHd.2.3.1.t00019-RA KRX89027.1      63.115  122     45      0       1       122     105     226     5.26e-42        140     Eukaryota
