@@ -6,7 +6,7 @@ The idea is to capture all the current NR matches to the query, and then
 excluding the recent tardigate sequences which were not present back
 in December 2015.
 
-(1) Creating older_matches.fasta
+# Creating FASTA file older_matches.fasta
 
 Using NR data 2018-06-08 (8 June 2018)
 
@@ -46,7 +46,7 @@ Using NR data 2018-06-08 (8 June 2018)
     496 older_matches.txt
 
 
-(2) Creating older_matches.taxmap.txt
+# Creating taxid map older_matches.taxmap.txt
 
 Derive full taxid map from the blast output using the 2018 NR database:
 
@@ -56,7 +56,7 @@ Note the messing about with the semi-colon as makeblastdb does not tolerate
 multiple taxid values for an entry.
 
 
-(3) Build the test database
+# Build the test database
 
 
 Build older_matches.fasta BLAST database
@@ -72,8 +72,7 @@ Build older_matches.fasta BLAST database
     Adding sequences from FASTA; added 496 sequences in 0.0551929 seconds.
 
 
-(4) Reproduce the issue
-
+# Reproduce the issue
 
 This works for reproducing the original problem, in that the top bacterial match comes and goes with changes to -max_target_seqs
     
