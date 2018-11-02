@@ -1,8 +1,8 @@
 # Test case for the BLAST+ number of alignments limit "issue".
 
-This git repository contains a small test case to reproduce for the
+This git repository contains a small test case to reproduce the
 ["-max_taget_seqs issue"](https://gist.github.com/sujaikumar/504b3b7024eaf3a04ef5)
-found by [Sujai Kumar](https://github.com/sujaikumar) in Dec 2015.
+found by [Sujai Kumar](https://github.com/sujaikumar) in December 2015.
 
 The files ``tests/older_matches.*`` contain a small protein BLAST database
 based on a subset of the NCBI NR database as of 2018-06-08 matching the
