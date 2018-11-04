@@ -25,3 +25,12 @@ introduces the small self-contained test case in this repository, and
 emphasises that this issue is not specific to ``-max_target_seqs`` but also
 affects the limits ``-num_descriptions`` and ``-num_alignments`` used with the
 human readable plain text or HTML output.
+
+[BLAST max alignment limits repartee - part
+two](https://blastedbio.blogspot.com/2018/11/blast-max-alignment-limits-repartee-two.html)
+explored the effect of database order (I could not reproduce the problem
+described in Shah et al. 2018), and the internal *N\*2+50* alignment limit.
+
+Nidhi Shah then got in touch via the blog comments to say that the
+[Shah et al (2018) test case is now on
+GitHub](https://github.com/shahnidhi/BLAST_maxtargetseq_analysis).
