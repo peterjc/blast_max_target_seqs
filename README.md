@@ -1,12 +1,33 @@
-# Test case for the BLAST+ number of alignments limit "issue".
+# Test cases for the BLAST+ number of alignments limit "issue".
 
-This git repository contains a small test case to reproduce the
+This git repository contains some small test cases to reproduce the
 ["-max_taget_seqs issue"](https://gist.github.com/sujaikumar/504b3b7024eaf3a04ef5)
 found by [Sujai Kumar](https://github.com/sujaikumar) in December 2015.
+
+## BLASTP example originally from Sujai Kumar (2015)
 
 The files ``tests/older_matches.*`` contain a small protein BLAST database
 based on a subset of the NCBI NR database as of 2018-06-08 matching the
 tardigrade query sequence in Sujai's original report.
+
+My blog post [BLAST max alignment limits repartee - part
+one](https://blastedbio.blogspot.com/2018/11/blast-max-alignment-limits-repartee-one.html)
+introduced this test case (see also the longer history below).
+
+## MEGABLAST example originally from Nidhi Shah (2018)
+
+The files under ``Shah_et_al_2018/`` contain a nucleotide BLAST database
+(``db.fasta``, ``db_rand_1.fasta``, ``db_rand_2.fasta``) and a FASTA query
+file (``example.fasta``), downloaded from the links given on [Nidhi Shah's
+repository](https://github.com/shahnidhi/BLAST_maxtargetseq_analysis),
+and files I created from them (de-duplicated database files, and single
+query FASTA files used in my testing).
+
+My blog post [BLAST max alignment limits reply - part
+three](https://blastedbio.blogspot.com/2018/11/blast-max-alignment-limits-part-three.html)
+introduced this	test case (see also the longer history below).
+
+## History
 
 My 2015 blog post ["What BLAST's max-target-sequences doesn't do"
 ](http://blastedbio.blogspot.co.uk/2015/12/blast-max-target-sequences-bug.html)
