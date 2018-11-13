@@ -50,8 +50,21 @@ human readable plain text or HTML output.
 [BLAST max alignment limits repartee - part
 two](https://blastedbio.blogspot.com/2018/11/blast-max-alignment-limits-repartee-two.html)
 explored the effect of database order (I could not reproduce the problem
-described in Shah et al. 2018), and the internal *N\*2+50* alignment limit.
+described in Shah et al. 2018), and the internal *N\*2+50* alignment limit
+(applicable to BLASTP - see below).
 
 Nidhi Shah then got in touch via the blog comments to say that the
 [Shah et al (2018) test case is now on
 GitHub](https://github.com/shahnidhi/BLAST_maxtargetseq_analysis).
+
+[BLAST max alignment limits - part
+three](https://blastedbio.blogspot.com/2018/11/blast-max-alignment-limits-part-three.html)
+examined the Shah et al (2018) test case, reproduced the strange behaviour,
+and demonstrated the benefits of deduplicating the database. See the files under
+``Shah_et_al_2018/`` for this.
+
+[BLAST max alignment limits - part
+four](https://blastedbio.blogspot.com/2018/11/blast-max-alignment-limits-part-four.html)
+examined the source code which sets the internal aligment limit and explains
+why with BLASTP and other protein database searches you get a higher internal
+alignment limit than with MEGABLAST, BLASTN or other nucleotide database searches.
