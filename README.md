@@ -6,9 +6,9 @@ found by [Sujai Kumar](https://github.com/sujaikumar) in December 2015.
 
 ## BLASTP example originally from Sujai Kumar (2015)
 
-The files ``tests/older_matches.*`` contain a small protein BLAST database
-based on a subset of the NCBI NR database as of 2018-06-08 matching the
-tardigrade query sequence in Sujai's original report.
+The files ``Kumar_et_al_2015/older_matches.*`` contain a small protein BLAST
+database based on a subset of the NCBI NR database as of 2018-06-08 matching
+the tardigrade query sequence in Sujai's original report.
 
 My blog post [BLAST max alignment limits repartee - part
 one](https://blastedbio.blogspot.com/2018/11/blast-max-alignment-limits-repartee-one.html)
